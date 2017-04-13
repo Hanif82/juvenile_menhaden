@@ -2,4 +2,10 @@
 
 multiple_join_paired_ends.py -i gz_files/ -o paired_reads/
 multiple_split_libraries_fastq.py -i paired_reads/ -o split_libraries/ --include_input_dir_path --remove_filepath_in_name
+
+#identify and removed chimeric sequences
 identify_chimeric_seqs.py -i split_libraries/seqs.fna -o chimera_analysis/ --suppress_usearch61_ref --split_by_sampleid -m usearch61
+filter_fasta.py -f split_libraries/seqs.fna -o fasta_files/chi_seqs.fna -s chimera_analysis/chimeras.txt -n 
+
+#identify and removed of PhiX sequences
+parallel_blast.py -i fasta_files/chi_seqs.fna -o fasta_files/chi_phi_seqs.fna -r /Volumes/Data/Menhaden/phiX.fasta 
